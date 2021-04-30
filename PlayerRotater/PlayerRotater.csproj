@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActionMenuApi, Version=0.1.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="ActionMenuApi, Version=0.1.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\Programs\Software\SteamLibrary\steamapps\common\VRChat\Mods\ActionMenuApi.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">

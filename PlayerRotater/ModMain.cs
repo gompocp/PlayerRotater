@@ -60,50 +60,10 @@ namespace PlayerRotater
             SetupUI();
 
             SetupSettings();
-            AMAPI.AddSubMenuToMenu(ActionMenuPageType.Main, () =>
+            if (MelonHandler.Mods.Any(m => m.Info.Name.Equals("ActionMenuApi")))
             {
                 
-                RotationSystem.Instance.playerTransform = Utilities.GetLocalVRCPlayer().transform;
-                Utilities.AlignTrackingToPlayerDelegate alignTrackingToPlayer = Utilities.GetAlignTrackingToPlayerDelegate;
-                AMAPI.AddRadialPedalToSubMenu((f) =>
-                {
-                    var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
-                    RotationSystem.Instance.playerTransform.eulerAngles = new Vector3((f / 100f)*360f, eulerAngles.y, eulerAngles.z);
-                    alignTrackingToPlayer.Invoke();
-                }, "Rotate X", (RotationSystem.Instance.playerTransform.eulerAngles.x/360f)*100f);
-                AMAPI.AddRadialPedalToSubMenu((f) =>
-                {
-                    var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
-                    RotationSystem.Instance.playerTransform.eulerAngles = new Vector3(eulerAngles.x, (f / 100f)*360f, eulerAngles.z);
-                    alignTrackingToPlayer.Invoke();
-                }, "Rotate Y", (RotationSystem.Instance.playerTransform.eulerAngles.y/360f)*100f);
-                AMAPI.AddRadialPedalToSubMenu((f) =>
-                {
-                    var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
-                    RotationSystem.Instance.playerTransform.eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, (f / 100f)*360f);
-                    alignTrackingToPlayer.Invoke();
-                }, "Rotate Z", (RotationSystem.Instance.playerTransform.eulerAngles.z/360f)*100f);
-                AMAPI.AddFourAxisPedalToSubMenu("Translate XY", Vector2.zero, (v) =>
-                {
-                    RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
-                }, null, "Y+", "X+", "Y-", "X-");
-                AMAPI.AddFourAxisPedalToSubMenu("Translate XY", Vector2.zero, (v) =>
-                {
-                    RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
-                }, null, "Y+", "X+", "Y-", "X-");
-                AMAPI.AddFourAxisPedalToSubMenu("Translate ZY", Vector2.zero, (v) =>
-                {
-                    RotationSystem.Instance.playerTransform.localPosition += new Vector3(0, v.y/25, v.x/25);
-                }, null, "Y+", "Z+", "Y-", "Z-");
-                AMAPI.AddFourAxisPedalToSubMenu("Translate XZ", Vector2.zero, (v) =>
-                {
-                    RotationSystem.Instance.playerTransform.localPosition += new Vector3(v.x/25, 0, v.y/25);
-                }, null, "Z+", "X+", "Z-", "X-");
-                AMAPI.AddTogglePedalToSubMenu((b) =>
-                {
-                    RotationSystem.Instance.Toggle();
-                }, false, "Toggle");
-            }, "Player Rotator");
+            }
         }
         private static float xRotation = 0;
         private static float yRotation = 0;
@@ -132,6 +92,59 @@ namespace PlayerRotater
             ExpansionKitApi.RegisterSettingAsStringEnum(ourCategory.Identifier, rotationOriginEntry?.Identifier, rotationOrigins);
 
             LoadSettings();
+        }
+
+        private void AddActionMenuIntegration()
+        {
+            AMAPI.AddSubMenuToMenu(ActionMenuPageType.Main, "Player Rotator", () => {
+                
+                RotationSystem.Instance.playerTransform = Utilities.GetLocalVRCPlayer().transform;
+                Utilities.AlignTrackingToPlayerDelegate alignTrackingToPlayer = Utilities.GetAlignTrackingToPlayerDelegate;
+                AMAPI.AddRadialPedalToSubMenu(
+                    "Rotate X",
+                    (f) => {
+                        var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
+                        RotationSystem.Instance.playerTransform.eulerAngles = new Vector3((f)*360f, eulerAngles.y, eulerAngles.z);
+                        alignTrackingToPlayer.Invoke(); 
+                    }, 
+                    RotationSystem.Instance.playerTransform.eulerAngles.x/360f
+                );
+                AMAPI.AddRadialPedalToSubMenu(
+                    "Rotate Y",
+                    (f) => {
+                        var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
+                        RotationSystem.Instance.playerTransform.eulerAngles = new Vector3(eulerAngles.x, (f)*360f, eulerAngles.z);
+                        alignTrackingToPlayer.Invoke();
+                    }, 
+                    RotationSystem.Instance.playerTransform.eulerAngles.y/360f
+                );
+                AMAPI.AddRadialPedalToSubMenu(
+                    "Rotate Z",
+                    (f) => {
+                        var eulerAngles = RotationSystem.Instance.playerTransform.eulerAngles;
+                        RotationSystem.Instance.playerTransform.eulerAngles = new Vector3(eulerAngles.x, eulerAngles.y, (f) * 360f);
+                        alignTrackingToPlayer.Invoke();
+                    },
+                    RotationSystem.Instance.playerTransform.eulerAngles.z / 360f
+                );
+                AMAPI.AddFourAxisPedalToSubMenu("Translate XY", (v) =>
+                {
+                    RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
+                }, null, "Y+", "X+", "Y-", "X-");
+                AMAPI.AddFourAxisPedalToSubMenu("Translate XY", (v) =>
+                {
+                    RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
+                }, null, "Y+", "X+", "Y-", "X-");
+                AMAPI.AddFourAxisPedalToSubMenu("Translate ZY", (v) =>
+                {
+                    RotationSystem.Instance.playerTransform.localPosition += new Vector3(0, v.y/25, v.x/25);
+                }, null, "Y+", "Z+", "Y-", "Z-");
+                AMAPI.AddFourAxisPedalToSubMenu("Translate XZ", (v) =>
+                {
+                    RotationSystem.Instance.playerTransform.localPosition += new Vector3(v.x/25, 0, v.y/25);
+                }, null, "Z+", "X+", "Z-", "X-");
+                AMAPI.AddButtonPedalToSubMenu("Toggle", RotationSystem.Instance.Toggle);
+            });
         }
 
         private static void LoadSettings()

@@ -42,3 +42,4 @@ using BuildInfo = PlayerRotater.BuildInfo;
 
 [assembly: MelonInfo(typeof(ModMain), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author, BuildInfo.DownloadLink)]
 [assembly: MelonGame("VRChat", "VRChat")]
+[assembly: MelonOptionalDependencies("ActionMenuApi")]

@@ -213,13 +213,10 @@ namespace PlayerRotater
 
         internal void Update()
         {
-            if (!rotating
-                || !WorldAllowed) return;
+            if (!rotating || !WorldAllowed) return;
 
             holdingShift = Input.GetKey(KeyCode.LeftShift);
-            if (!BarrelRolling
-                && CurrentControlScheme.HandleInput(playerTransform, cameraTransform))
-                alignTrackingToPlayer();
+            if (!BarrelRolling && CurrentControlScheme.HandleInput(playerTransform, cameraTransform)) alignTrackingToPlayer();
         }
 
         internal void OnLeftWorld()
