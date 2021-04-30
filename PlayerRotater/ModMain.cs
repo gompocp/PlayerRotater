@@ -60,10 +60,9 @@ namespace PlayerRotater
             SetupUI();
 
             SetupSettings();
-            if (MelonHandler.Mods.Any(m => m.Info.Name.Equals("ActionMenuApi")))
-            {
-                
-            }
+            if (MelonHandler.Mods.Any(m => m.Info.Name.Equals("ActionMenuApi"))) 
+                AddActionMenuIntegration();
+            
         }
         private static float xRotation = 0;
         private static float yRotation = 0;
