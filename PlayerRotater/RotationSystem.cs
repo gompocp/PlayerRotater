@@ -17,9 +17,9 @@ namespace PlayerRotater
     public class RotationSystem
     {
 
-        internal static float FlyingSpeed = 5f;
+        public static float FlyingSpeed = 5f;
 
-        internal static float RotationSpeed = 180f;
+        public static float RotationSpeed = 180f;
 
         internal static bool NoClipFlying = true;
 
@@ -37,7 +37,7 @@ namespace PlayerRotater
 
         private Vector3 originalGravity;
 
-        private Transform playerTransform, originTransform;
+        public Transform playerTransform, originTransform;
 
         private bool rotating;
 
