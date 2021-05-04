@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ActionMenuApi;
+using ActionMenuApi.Types;
 
 namespace PlayerRotater
 {
@@ -130,14 +131,12 @@ namespace PlayerRotater
                 {
                     RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
                 }, null, "Y+", "X+", "Y-", "X-");
-                AMAPI.AddFourAxisPedalToSubMenu("Translate XY", (v) =>
-                {
-                    RotationSystem.Instance.playerTransform.localPosition += (Vector3) (v / 25);
-                }, null, "Y+", "X+", "Y-", "X-");
+                
                 AMAPI.AddFourAxisPedalToSubMenu("Translate ZY", (v) =>
                 {
                     RotationSystem.Instance.playerTransform.localPosition += new Vector3(0, v.y/25, v.x/25);
                 }, null, "Y+", "Z+", "Y-", "Z-");
+                
                 AMAPI.AddFourAxisPedalToSubMenu("Translate XZ", (v) =>
                 {
                     RotationSystem.Instance.playerTransform.localPosition += new Vector3(v.x/25, 0, v.y/25);
